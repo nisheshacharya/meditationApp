@@ -1,5 +1,15 @@
 {
   "expo": {
+    "assetBundlePatterns": [
+      "**/*",
+      "node_modules/react-native-vector-icons/**/*"
+    ],
+    "icon": "./path-to-your-icon.png",
+    "font": {
+      "Roboto": {
+        "uri": "./node_modules/react-native-vector-icons/Fonts/Roboto.ttf"
+      }
+    },
     "name": "meditation",
     "slug": "meditation",
     "version": "1.0.0",

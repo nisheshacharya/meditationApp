@@ -1,14 +1,6 @@
-// screens/HomeScreen.js
 import React, { useState } from 'react';
-import {
-  ImageBackground,
-  View,
-  Text,
-  StyleSheet,
-  Button,
-  TextInput,
-  Image,
-} from 'react-native';
+import { View, Text, StyleSheet, Button, TextInput, Image, TouchableOpacity, ImageBackground } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 // Import the background image
 const backgroundImage = require('../media/Meditate.gif'); // Replace with your actual background image path
@@ -19,7 +11,7 @@ export default function HomeScreen({ navigation }) {
   const [time, setTime] = useState({ med_minutes: 0, med_seconds: 0, rest_minutes: 0, rest_seconds: 0 });
   const [count, setCount] = useState(0);
 
-  const formatTime = (seconds) => {
+  const formatTime = (seconds) => { 
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
@@ -47,10 +39,10 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-    <ImageBackground source={backgroundImage} style={styles.background}>
-      <View style={styles.container}>
-        <Text style={styles.text}>Meditation for Inner Peace</Text>
+    <View style={styles.container}>
+      <ImageBackground source={backgroundImage} style={styles.background}>
         <View style={styles.content}>
+          <Text style={styles.text}>Meditation for Inner Peace</Text>
           <Image source={require('../media/AppLogo.png')} style={styles.logo} />
           <Text style={styles.text}>{formatTime(count)}</Text>
           <View style={styles.inputContainer}>
@@ -69,9 +61,7 @@ export default function HomeScreen({ navigation }) {
               />
             </View>
             <Text style={styles.label}>Meditation Time</Text>
-
             <View style={styles.gap} />
-
             <View style={styles.inputGroup}>
               <TextInput
                 placeholder='Min'
@@ -88,13 +78,34 @@ export default function HomeScreen({ navigation }) {
             </View>
             <Text style={styles.label}>Rest Time</Text>
           </View>
-
-          {started ? <Button title='Stop' onPress={stop} /> : <Button title='Start' onPress={start} />}
-          {started && !paused ? <Button title='Pause' onPress={pause} /> : null}
-          {started && paused ? <Button title='Resume' onPress={resume} /> : null}
+          <View style={styles.buttonContainer}>
+            {started ? (
+              <TouchableOpacity style={styles.button} onPress={stop}>
+                <MaterialIcons name="stop" size={24} color="white" />
+                <Text style={styles.buttonText}>Stop</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={styles.button} onPress={start}>
+                <MaterialIcons name="play-arrow" size={24} color="white" />
+                <Text style={styles.buttonText}>Start</Text>
+              </TouchableOpacity>
+            )}
+            {started && !paused ? (
+              <TouchableOpacity style={styles.button} onPress={pause}>
+                <MaterialIcons name="pause" size={24} color="white" />
+                <Text style={styles.buttonText}>Pause</Text>
+              </TouchableOpacity>
+            ) : null}
+            {started && paused ? (
+              <TouchableOpacity style={styles.button} onPress={resume}>
+                <MaterialIcons name="play-arrow" size={24} color="white" />
+                <Text style={styles.buttonText}>Resume</Text>
+              </TouchableOpacity>
+            ) : null}
+          </View>
         </View>
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </View>
   );
 }
 
@@ -108,6 +119,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    width: '100%',
   },
   content: {
     flex: 1,
@@ -150,5 +162,22 @@ const styles = StyleSheet.create({
   },
   gap: {
     height: 20,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#6200ee',
+    padding: 10,
+    borderRadius: 5,
+    marginHorizontal: 5,
+  },
+  buttonText: {
+    color: 'white',
+    marginLeft: 10,
   },
 });
