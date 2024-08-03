@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {Image, Button, StyleSheet, View, ImageBackground, TextInput, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { Image, Button, StyleSheet, View, ImageBackground, TextInput, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Audio } from 'expo-av';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
@@ -144,7 +144,11 @@ export default function App() {
     const hour = currentDate.getHours().toString().padStart(2, '0');
     const minute = currentDate.getMinutes().toString().padStart(2, '0');
 
-    const newEntry = { year, month, day, hour, minute };
+    // Calculate duration
+    const medDurationInSeconds = time.med_minutes * 60 + time.med_seconds;
+    const duration = formatTime(medDurationInSeconds);
+
+    const newEntry = { year, month, day, hour, minute, duration };
     const updatedHistory = [...history, newEntry];
     setHistory(updatedHistory);
 
@@ -248,7 +252,7 @@ export default function App() {
               {history.map((entry, index) => (
                 <View key={index} style={styles.historyItem}>
                   <Text style={styles.historyText}>
-                    {`${entry.year}-${entry.month}-${entry.day} ${entry.hour}:${entry.minute}`}
+                    {`${entry.year}-${entry.month}-${entry.day} ${entry.hour}:${entry.minute} - Duration: ${entry.duration}`}
                   </Text>
                 </View>
               ))}
