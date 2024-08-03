@@ -1,7 +1,11 @@
-// App.js
 import React from 'react';
 import AppNavigator from './navigation/AppNavigator';
+import { HistoryProvider } from './context/HistoryContext';
 
 export default function App() {
-  return <AppNavigator />;
+  return (
+    <HistoryProvider>
+      <AppNavigator />
+    </HistoryProvider>
+  );
 }
