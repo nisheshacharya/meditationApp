@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, StyleSheet, View, ImageBackground, TextInput, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import {Image, Button, StyleSheet, View, ImageBackground, TextInput, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Audio } from 'expo-av';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
