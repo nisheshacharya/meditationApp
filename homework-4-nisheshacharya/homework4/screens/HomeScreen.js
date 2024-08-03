@@ -49,7 +49,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
       <View style={styles.container}>
-        <Text style={styles.text}>Home Screen</Text>
+        <Text style={styles.text}>Meditation for Inner Peace</Text>
         <View style={styles.content}>
           <Image source={require('../media/AppLogo.png')} style={styles.logo} />
           <Text style={styles.text}>{formatTime(count)}</Text>
