@@ -1,4 +1,3 @@
-// screens/HomeScreen.js
 import React, { useState, useEffect, useContext } from 'react';
 import { Button, Image, StyleSheet, View, ImageBackground, TextInput, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Audio } from 'expo-av';
@@ -16,7 +15,7 @@ export default function HomeScreen() {
   const [sound1, setSound1] = useState(null);
   const [sound2, setSound2] = useState(null);
   const [background, setBackground] = useState(backgroundImage);
-  const [historyDisplay, setHistoryDisplay] = useState(false);
+
 
   // Context for managing meditation history
   const { history, setHistory } = useContext(HistoryContext);
