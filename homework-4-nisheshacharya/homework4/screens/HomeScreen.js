@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useState, useEffect, useContext } from 'react';
 import { Button, Image, StyleSheet, View, ImageBackground, TextInput, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Audio } from 'expo-av';
+
 import { HistoryContext } from '../context/HistoryContext';
 
 const backgroundImage = require("../media/Meditate.gif");
@@ -69,7 +70,7 @@ export default function HomeScreen() {
 
       return () => clearInterval(interval);
     }
-  }, [started, paused, sound1, sound2, time]);
+  }, [started, paused, sound1, sound2, time, count]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -78,17 +79,30 @@ export default function HomeScreen() {
   };
 
   const textChange = (field, text) => {
+    // Convert the text input to a number and ensure it's within range
     const newValue = Math.min(parseInt(text) || 0, 60);
-    setTime({ ...time, [field]: newValue });
+  
+  
+    // Update the time state
+    setTime(prevTime => {
+    
+      const updatedTime = { ...prevTime, [field]: newValue };
+      const totalMeditation = updatedTime.med_minutes * 60 + updatedTime.med_seconds;
+      const totalRest = updatedTime.rest_minutes * 60 + updatedTime.rest_seconds;
+      const newCount = totalMeditation + totalRest;
+      setCount(newCount);
+  
+      // Return the updated time state to make sure updatedTime is actually updated. 
+      return updatedTime;
+    });
   };
+  
 
   const start = () => {
-    const totalMeditation = time.med_minutes * 60 + time.med_seconds;
-    const total = totalMeditation + time.rest_minutes * 60 + time.rest_seconds;
-    setCount(total);
     setStarted(true);
   };
 
+ 
   const stop = () => {
     setStarted(false);
     setCount(0);
@@ -121,7 +135,7 @@ export default function HomeScreen() {
     <ImageBackground source={background} style={styles.background}>
       <View style={styles.content}>
         <Image source={require('../media/AppLogo.png')} style={styles.logo} />
-        <Text style={styles.text}>{formatTime(count)}</Text>
+        <Text style={styles.text} className = "count">{count}</Text>
         <View style={styles.inputContainer}>
           <View style={styles.inputRow}>
             <TextInput
@@ -175,10 +189,12 @@ export default function HomeScreen() {
             </TouchableOpacity>
           ) : null}
         </View>
+
       </View>
     </ImageBackground>
   );
 }
+
 
 const styles = StyleSheet.create({
   background: {
@@ -223,21 +239,25 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
+    alignItems: 'center',
+
     width: '100%',
+  
   },
   button: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     backgroundColor: '#6200ee',
+    maxWidth: '50%' , 
     padding: 10,
     borderRadius: 5,
-    marginHorizontal: 5,
+    marginVertical: 10,
+    textAlign: 'auto'
   },
   buttonText: {
     color: 'white',
-    marginLeft: 10,
+   
   },
   history: {
     marginTop: 20,
