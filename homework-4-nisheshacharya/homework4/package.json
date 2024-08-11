@@ -33,10 +33,7 @@
     "react-native-web": "^0.19.12"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "webpack": "^5.82.1",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4"
+    "@babel/core": "^7.20.0"
   },
   "private": true,
   "keywords": [],
