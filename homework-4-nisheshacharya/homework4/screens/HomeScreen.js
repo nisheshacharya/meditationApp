@@ -36,7 +36,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (started && !paused) {
-      const medTime = time.med_minutes * 60 + time.med_seconds;
+      const medTime = parseInt(time.med_minutes) * 60 + parseInt(time.med_seconds);
       const restTime = time.rest_minutes * 60 + time.rest_seconds;
       const total = medTime + restTime;
       const interval = setInterval(() => {
@@ -59,6 +59,7 @@ export default function HomeScreen() {
             setStarted(false);
             setPaused(false);
             setPhase('stopped');
+            setTime({ med_minutes: 0, med_seconds: 0, rest_minutes: 0, rest_seconds: 0 });
             saveMeditationHistory();
           }
 
@@ -78,14 +79,15 @@ export default function HomeScreen() {
 
   const onPickerChange = (field, value) => {
     setTime(prevTime => {
-      const updatedTime = { ...prevTime, [field]: value };
-      const totalMeditation = updatedTime.med_minutes * 60 + updatedTime.med_seconds;
-      const totalRest = updatedTime.rest_minutes * 60 + updatedTime.rest_seconds;
-      const newCount = totalMeditation + totalRest;
-      setCount(newCount);
-      return updatedTime;
+        const updatedTime = { ...prevTime, [field]: parseInt(value, 10) };
+        const totalMeditation = parseInt(updatedTime.med_minutes, 10) * 60 + parseInt(updatedTime.med_seconds, 10);
+        const totalRest = parseInt(updatedTime.rest_minutes, 10) * 60 + parseInt(updatedTime.rest_seconds, 10);
+        const newCount = totalMeditation + totalRest;
+        setCount(newCount);
+        return updatedTime;
     });
-  };
+};
+
 
   const start = () => {
     if(!started && !paused){
@@ -99,6 +101,7 @@ export default function HomeScreen() {
     setStarted(false);
     setCount(0);
     setPhase('stopped')
+    setTime({ med_minutes: 0, med_seconds: 0, rest_minutes: 0, rest_seconds: 0 });
     setBackground(backgroundImage);
   };
 
@@ -138,11 +141,13 @@ export default function HomeScreen() {
     }
   };
 
+  const toTimeFormat = (time)=>(Math.floor(time/60) + " : " + Math.floor(time%60));
+
   return (
     <ImageBackground source={background} style={styles.background}>
       <View style={styles.content}>
         <Image source={require('../media/AppLogo.png')} style={styles.logo} />
-        <Text style={styles.text} className="count">{count}</Text>
+        <Text style={styles.text} className="count">{toTimeFormat(count)}</Text>
         <View style={styles.inputContainer}>
           <View style={styles.inputRow}>
             <Picker
