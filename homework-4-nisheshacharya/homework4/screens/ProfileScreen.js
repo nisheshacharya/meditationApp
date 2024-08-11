@@ -1,10 +1,51 @@
-// screens/ProfileScreen.js
-import React, { useContext } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { HistoryContext } from '../context/HistoryContext';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Button, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as FileSystem from 'expo-file-system';
+
 
 export default function ProfileScreen() {
-  const { history } = useContext(HistoryContext);
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    getHistory();
+  }, []);
+
+  const getHistory = async () => {
+    try {
+      let localHistory = await AsyncStorage.getItem('meditationHistory');
+      if (localHistory) {
+        setHistory(JSON.parse(localHistory));
+      }
+    } catch (error) {
+      console.log("Error fetching history:", error);
+    }
+  };
+
+  const exportHistoryAsTxt = async () => {
+    if (history.length === 0) {
+      Alert.alert("No history available to export.");
+      return;
+    }
+  
+    const fileName = 'meditation_history.txt';
+    const directory = FileSystem.documentDirectory;
+  
+    let historyText = history.map(entry => {
+      return `Date: ${entry.year}-${entry.month}-${entry.day}\nTime: ${entry.hour}:${entry.minute}\nDuration: ${entry.duration}\n\n`;
+    }).join('');
+  
+    try {
+      const filePath = `${directory}${fileName}`;
+      await FileSystem.writeAsStringAsync(filePath, historyText);
+      Alert.alert('Export Successful!', `Meditation history saved to "${fileName}" in app storage.`);
+    } catch (error) {
+      console.error('Error exporting history:', error);
+      Alert.alert('Export Failed!', 'An error occurred while exporting history.');
+    }
+  };
+  
+  
 
   return (
     <View style={styles.container}>
@@ -23,6 +64,7 @@ export default function ProfileScreen() {
           <Text style={styles.noHistory}>No meditation history available.</Text>
         )}
       </ScrollView>
+      <Button title="Export History as TXT" onPress={exportHistoryAsTxt} />
     </View>
   );
 }
